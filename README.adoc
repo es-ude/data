@@ -1,0 +1,110 @@
+= UDE Intelligent Embedded Systems (IES) Data
+
+The library collects utilities to download data used for research and teaching.
+In the future we might add some very basic tools for preprocessing.
+
+== Installation
+
+=== Simple Approach
+
+Make sure you have at least `python3.10` installed.
+Then you can install the package via
+
+[source, bash]
+----
+$ pip install git+ssh://git@github.com:es-ude/data.git
+----
+
+=== Recommended Approach
+
+We recommend to install the https://docs.astral.sh/uv/#getting-started[uv package manager].
+Afterwards you can use
+
+[source, bash]
+----
+$ uv init --python 3.12 my-project
+$ cd my-project
+$ uv python install python3.12
+$ uv add git+ssh://git@github.com:es-ude/data.git
+$ uv sync
+$ source .venv/bin/activate
+----
+
+== Usage
+
+
+=== Downloading
+
+You can use
+
+[source, python]
+----
+from iesude.data import MitBihAtrialFibrillationDataSet as AFDataSet
+
+d = AFDataSet.download("my_data_dir")
+----
+
+This will download the data from our public sciebo share into a tmp directory
+and extract the contents into a folder called `my_data_dir`.
+
+=== Adding Your Data
+
+You need write access to our https://uni-duisburg-essen.sciebo.de/s/pWPghcaiYFhz6BW[sciebo share].
+Upload your dataset, preferrably as a zip file, since support for compressed tar archives is not implemented yet.
+Assuming you stored your data under `"myproject/dataset01.zip"`.
+You define your new dataset like so
+
+[source, python]
+----
+from iesude.data import DataSet, Zip as ZipArchive
+
+class MyNewDataSet(DataSet):
+    file_path = "myproject/dataset01.zip"
+	file_type = ZipArchive
+----
+
+
+
+== Features
+
+- automatic download from UDE IES sciebo share
+- automatic archive extraction into a given folder
+- supported file types are
+  * `.zip` archive
+  * uncompressed `.tar` archive
+  * plain files (download a file directly to your folder without extraction)
+
+
+== Todo
+
+- [ ] `tar.gz`
+- [ ] `tar.xz`
+- [ ] override share endpoint in user config
+- [ ] upload data sets
+- [ ] automatically put descriptions/readmes for uploaded datasets in github repo
+- [ ] autogenerate classes when uploading a data set
+
+
+== Contribution
+
+To contribute, clone the repository and install uv (link in the install section).
+Additionally also install pre-commit, e.g., like so
+
+[source, bash]
+----
+uv tool install pre-commit
+----
+
+Alternatively we provide a nix flake, that should take care of providing most
+necessary/recommended tools.
+
+The bare basic to get started is to install nix with a single command from 
+https://nixos.org/download/#download-nix[here] (Support for Linux/MacOS/Windows WSL2).
+Afterwards you can simply call
+
+[source, bash]
+----
+nix develop
+----
+
+from the project root to be dropped in a dev shell with uv, pre-commit, mypy, etc. pre-installed.
