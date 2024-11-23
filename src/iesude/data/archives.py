@@ -1,6 +1,6 @@
 from pathlib import Path
 import shutil
-from iesude.data.extractable import Extractable
+from .extractable import Extractable
 from collections.abc import Iterable
 from tarfile import TarFile
 from zipfile import ZipFile

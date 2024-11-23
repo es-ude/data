@@ -1,6 +1,7 @@
+from pathlib import Path
+
 from .extractable import ExtractableFn
 from .archives import Tar as TarArchive, Zip as ZipArchive
-from pathlib import Path
 from .downloader import download_if_missing
 
 

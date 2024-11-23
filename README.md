@@ -1,71 +1,67 @@
-= UDE Intelligent Embedded Systems (IES) Data
+# UDE Intelligent Embedded Systems (IES) Data
 
 The library collects utilities to download data used for research and teaching.
 In the future we might add some very basic tools for preprocessing.
 
-== Installation
+## Installation
 
-=== Simple Approach
+### Simple Approach
 
 Make sure you have at least `python3.10` installed.
 Then you can install the package via
 
-[source, bash]
-----
+```bash
 $ pip install git+ssh://git@github.com:es-ude/data.git
-----
+```
 
-=== Recommended Approach
+### Recommended Approach
 
-We recommend to install the https://docs.astral.sh/uv/#getting-started[uv package manager].
+We recommend to install the [uv package manager](https://docs.astral.sh/uv/#getting-started).
 Afterwards you can use
 
-[source, bash]
-----
+```bash
 $ uv init --python 3.12 my-project
 $ cd my-project
 $ uv python install python3.12
 $ uv add git+ssh://git@github.com:es-ude/data.git
 $ uv sync
 $ source .venv/bin/activate
-----
+```
 
-== Usage
+## Usage
 
 
-=== Downloading
+### Downloading
 
 You can use
 
-[source, python]
-----
+```python
 from iesude.data import MitBihAtrialFibrillationDataSet as AFDataSet
 
 d = AFDataSet.download("my_data_dir")
-----
+```
 
 This will download the data from our public sciebo share into a tmp directory
 and extract the contents into a folder called `my_data_dir`.
 
-=== Adding Your Data
+### Adding Your Data
 
-You need write access to our https://uni-duisburg-essen.sciebo.de/s/pWPghcaiYFhz6BW[sciebo share].
+You need write access to our [sciebo share](https://uni-duisburg-essen.sciebo.de/s/pWPghcaiYFhz6BW).
 Upload your dataset, preferrably as a zip file, since support for compressed tar archives is not implemented yet.
 Assuming you stored your data under `"myproject/dataset01.zip"`.
 You define your new dataset like so
 
-[source, python]
-----
+```python
 from iesude.data import DataSet, Zip as ZipArchive
 
 class MyNewDataSet(DataSet):
     file_path = "myproject/dataset01.zip"
-	file_type = ZipArchive
-----
+    file_type = ZipArchive
+```
 
 
 
-== Features
+## Features
 
 - automatic download from UDE IES sciebo share
 - automatic archive extraction into a given folder
@@ -75,7 +71,7 @@ class MyNewDataSet(DataSet):
   * plain files (download a file directly to your folder without extraction)
 
 
-== Todo
+## Todo
 
 - [ ] `tar.gz`
 - [ ] `tar.xz`
@@ -85,26 +81,20 @@ class MyNewDataSet(DataSet):
 - [ ] autogenerate classes when uploading a data set
 
 
-== Contribution
+## Contribution
 
 To contribute, clone the repository and install uv (link in the install section).
 Additionally also install pre-commit, e.g., like so
 
-[source, bash]
-----
-uv tool install pre-commit
-----
+```bash
+$ uv tool install pre-commit
+```
 
-Alternatively we provide a nix flake, that should take care of providing most
-necessary/recommended tools.
+Alternatively you can use [devenv](https://devenv.sh/) environment for reproducible, declarative and easy to use setup. It will take care of
 
-The bare basic to get started is to install nix with a single command from 
-https://nixos.org/download/#download-nix[here] (Support for Linux/MacOS/Windows WSL2).
-Afterwards you can simply call
+- installing `uv` and calling it to install python and the dev dependencies
+- most importantly it will install and setup pre-commit
 
-[source, bash]
-----
-nix develop
-----
+Follow the 2 steps from the devenv [getting started guide](https://devenv.sh/getting-started/).
 
-from the project root to be dropped in a dev shell with uv, pre-commit, mypy, etc. pre-installed.
+Additionally, we recommend you use [direnv](https://direnv.net/docs/installation.html#from-system-packages) to activate devenv automatically upon entering the project in a shell (also supported by several IDE/Editor plugins).
