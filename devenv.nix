@@ -11,10 +11,25 @@ let
 in
 {
 
-  packages = [ pkgs.git ];
+  packages =
+    let
+      p3 = unstablePkgs.python312Packages;
+    in
+    [
+      pkgs.git
+      unstablePkgs.mypy
+      p3.python-lsp-server
+      p3.pluggy
+      p3.pylsp-rope
+      p3.pylsp-mypy
+      unstablePkgs.asciidoctor
+      unstablePkgs.uv
+      unstablePkgs.ruff
+    ];
 
   languages.python = {
     enable = true;
+    package = unstablePkgs.python312;
     uv.enable = true;
     uv.package = unstablePkgs.uv;
     uv.sync.enable = true;

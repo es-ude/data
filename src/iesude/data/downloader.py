@@ -25,7 +25,9 @@ def tmp_file_path_for_archive(archive_name):
 
 class DownloaderNotInitializedException(Exception):
     def __init__(self):
-        super().__init__("Downloader not initialized, use `with Downloader(...) as d: ...`")
+        super().__init__(
+            "Downloader not initialized, use `with Downloader(...) as d: ...`"
+        )
 
 
 class _ExplodingClient(Client):
@@ -37,6 +39,7 @@ class _ExplodingClient(Client):
 
     def get_file(self, file_path: str, out_dir: Path | str) -> None:
         raise DownloaderNotInitializedException()
+
 
 class UnspecifiedDataSetTypeException(Exception):
     def __init__(self):
@@ -53,16 +56,15 @@ class _ExplodingDataSet:
         raise UnspecifiedDataSetTypeException()
 
 
-
 class Downloader:
     def __init__(self, client_fn: ClientFn) -> None:
         self._client_fn: ClientFn = client_fn
         self._client: Client = _ExplodingClient()
         self._remote: DataSetP = _ExplodingDataSet()
-        self._out_dir: Path  = Path("data")
+        self._out_dir: Path = Path("data")
 
     def __enter__(self):
-        self.client = self._client_fn(
+        self._client = self._client_fn(
             "https://uni-duisburg-essen.sciebo.de/s/pWPghcaiYFhz6BW",
         )
         return self
@@ -82,7 +84,7 @@ class Downloader:
         return self._client.file_info(self._remote.file_path).is_dir()
 
     def _check_for_problems(self):
-        if self.client is None:
+        if self._client is None:
             raise Exception("you have to create a connection first")
         if self._remote is None:
             raise ValueError()
@@ -97,19 +99,18 @@ class Downloader:
     def _do_download(self, out_dir: Path):
         self._client.get_file(self._remote.file_path, out_dir)
 
-    def _do_extract_from(self, directory: Path):
+    def _do_extract_from(self, archive_path: Path):
         self.mk_permanent_out_dir()
-        archive_path = directory / self._remote.file_path
         archive = self._remote.file_type(archive_path)
-        archive.download(out_dir=self._out_dir)
+        archive.extract(out_dir=self._out_dir)
 
     def mk_permanent_out_dir(self):
         self._out_dir.mkdir(parents=True, exist_ok=True)
 
 
-def download_if_missing(archive_name: str, output_directory: str | Path):
+def download_if_missing(dataset: DataSetP, output_directory: str | Path) -> None:
     output_directory = Path(output_directory)
     if output_directory.exists():
         return
     with Downloader(create_sciebo_client_from_public_url) as d:
-        d.download(archive_name, output_directory)
+        d.download(dataset, output_directory)

@@ -44,6 +44,8 @@ d = AFDataSet.download("my_data_dir")
 This will download the data from our public sciebo share into a tmp directory
 and extract the contents into a folder called `my_data_dir`.
 
+If you want to download your data again you need to delete that directory.
+
 ### Adding Your Data
 
 You need write access to our [sciebo share](https://uni-duisburg-essen.sciebo.de/s/pWPghcaiYFhz6BW).
@@ -54,9 +56,7 @@ You define your new dataset like so
 ```python
 from iesude.data import DataSet, Zip as ZipArchive
 
-class MyNewDataSet(DataSet):
-    file_path = "myproject/dataset01.zip"
-    file_type = ZipArchive
+MyNewDataSet = DataSet(file_path = "myproject/dataset01.zip", file_type=ZipArchive)
 ```
 
 
@@ -79,7 +79,8 @@ class MyNewDataSet(DataSet):
 - [ ] upload data sets
 - [ ] automatically put descriptions/readmes for uploaded datasets in github repo
 - [ ] autogenerate classes when uploading a data set
-
+- [ ] upload checksums for datasets
+- [ ] use checksums instead of directory presence to decide whether or not to download datasets
 
 ## Contribution
 
