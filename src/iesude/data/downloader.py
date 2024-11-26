@@ -112,5 +112,10 @@ def download_if_missing(dataset: DataSetP, output_directory: str | Path) -> None
     output_directory = Path(output_directory)
     if output_directory.exists():
         return
+    download(dataset, output_directory)
+
+
+def download(dataset: DataSetP, output_directory: str | Path) -> None:
+    output_directory = Path(output_directory)
     with Downloader(create_sciebo_client_from_public_url) as d:
         d.download(dataset, output_directory)

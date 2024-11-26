@@ -1,7 +1,7 @@
 from pathlib import Path
 from .extractable import ExtractableFn
 from .archives import Tar as TarArchive
-from .downloader import download_if_missing
+from .downloader import download_if_missing, download
 
 
 class DataSet:
@@ -18,7 +18,11 @@ class DataSet:
         return self._file_path
 
     def download(self, output_directory: str | Path) -> None:
+        download(dataset=self, output_directory=output_directory)
+
+    def download_if_missing(self, output_directory: str | Path) -> None:
         download_if_missing(dataset=self, output_directory=output_directory)
+
 
 
 MitBihAtrialFibrillationDataSet = DataSet(
