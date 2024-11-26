@@ -102,7 +102,7 @@ class Downloader:
     def _do_extract_from(self, archive_path: Path):
         self.mk_permanent_out_dir()
         archive = self._remote.file_type(archive_path)
-        archive.extract(out_dir=self._out_dir)
+        archive.extract(output_directory=self._out_dir)
 
     def mk_permanent_out_dir(self):
         self._out_dir.mkdir(parents=True, exist_ok=True)
