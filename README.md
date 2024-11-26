@@ -81,6 +81,8 @@ MyNewDataSet = DataSet(file_path = "myproject/dataset01.zip", file_type=ZipArchi
 - [ ] autogenerate classes when uploading a data set
 - [ ] upload checksums for datasets
 - [ ] use checksums instead of directory presence to decide whether or not to download datasets
+- [ ] download progress bar
+- [ ] logging
 
 ## Contribution
 
@@ -91,7 +93,7 @@ Additionally also install pre-commit, e.g., like so
 $ uv tool install pre-commit
 ```
 
-Alternatively you can use [devenv](https://devenv.sh/) environment for reproducible, declarative and easy to use setup. It will take care of
+Alternatively you can use [**devenv**](https://devenv.sh/) environment for reproducible, declarative and easy to use setup. It will take care of
 
 - installing `uv` and calling it to install python and the dev dependencies
 - most importantly it will install and setup pre-commit
