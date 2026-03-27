@@ -65,7 +65,7 @@ class Downloader:
 
     def __enter__(self):
         self._client = self._client_fn(
-            "https://uni-duisburg-essen.sciebo.de/s/pWPghcaiYFhz6BW",
+            "https://uni-duisburg-essen.sciebo.de/s/bmtx6WYDWR3qYZA",
         )
         return self
 
