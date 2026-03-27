@@ -7,6 +7,7 @@ from typing import Protocol
 from ._oc_cloud_client import create_sciebo_client_from_public_url
 from .extractable import ExtractableFn
 from ._cloud_client import ClientFn, Client, FileInfo
+import logging
 
 
 class DataSetP(Protocol):
@@ -62,11 +63,17 @@ class Downloader:
         self._client: Client = _ExplodingClient()
         self._remote: DataSetP = _ExplodingDataSet()
         self._out_dir: Path = Path("data")
+        self._logger = logging.getLogger(__name__)
+
+    def _debug(self, message: str) -> None:
+        self._logger.log(logging.DEBUG, msg = message)
 
     def __enter__(self):
+        self._debug("initializing connection")
         self._client = self._client_fn(
             "https://uni-duisburg-essen.sciebo.de/s/bmtx6WYDWR3qYZA",
         )
+        self._debug("connected")
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -77,7 +84,9 @@ class Downloader:
         self._out_dir = Path(output)
         self._check_for_problems()
         with self._tmp_out_dir() as tmp_out:
+            self._debug("start download")
             self._do_download(tmp_out)
+            self._debug("finished download")
             self._do_extract_from(tmp_out)
 
     def _remote_is_dir(self):
@@ -108,14 +117,14 @@ class Downloader:
         self._out_dir.mkdir(parents=True, exist_ok=True)
 
 
-def download_if_missing(dataset: DataSetP, output_directory: str | Path) -> None:
-    output_directory = Path(output_directory)
+def download_if_missing(dataset: DataSetP, dataset_dir: str | Path) -> None:
+    output_directory = Path(dataset_dir)
     if output_directory.exists():
         return
     download(dataset, output_directory)
 
 
-def download(dataset: DataSetP, output_directory: str | Path) -> None:
-    output_directory = Path(output_directory)
+def download(dataset: DataSetP, dataset_dir: str | Path) -> None:
+    output_directory = Path(dataset_dir)
     with Downloader(create_sciebo_client_from_public_url) as d:
         d.download(dataset, output_directory)

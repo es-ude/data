@@ -20,8 +20,8 @@ class DataSet:
     def download(self, output_directory: str | Path) -> None:
         download(dataset=self, output_directory=output_directory)
 
-    def download_if_missing(self, output_directory: str | Path) -> None:
-        download_if_missing(dataset=self, output_directory=output_directory)
+    def download_if_missing(self, dataset_dir: str | Path) -> None:
+        download_if_missing(dataset=self, dataset_dir=dataset_dir)
 
 
 
